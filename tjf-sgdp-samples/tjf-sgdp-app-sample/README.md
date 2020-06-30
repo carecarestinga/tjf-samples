@@ -24,42 +24,44 @@ Incluir a biblioteca como dependência no `pom.xml` da aplicação:
 Além das propriedades existentes no `application.yml` da aplicação, será necessário incluir novas propriedades. Conforme o exemplo:
 
 ```yml
-cloud:
-  stream:
+  cloud:
+    stream:
 
-    kafka:
-      binder:
-        brokers: localhost:9092
-        configuration:
-          auto:
-            offset:
-              reset: earliest
+      kafka:
+        binder:
+          brokers: localhost:9092
+          configuration:
+            auto:
+              offset:
+                reset: earliest       
 
-    binders:
-      kafka1:
-        type: kafka
-      rabbit1:
-        type: rabbit
-        environment:
-          spring:
-            habbit:
-              host: localhost:5672
-
-    bindings:
-
-      sgdp-audit:
-        destination: sgdp-audit
-        contentType: application/json
-        binder: kafka1
-
-      sgdp-input:
-        destination: sgdp-commands
-        group: sw-sgdp-app
-        binder: rabbit1
-      sgdp-output:
-        destination: sgdp-responses
-        binder: rabbit1
+      binders:
+        kafka1:
+          type: kafka
+        rabbit1:
+          type: rabbit
+          environment:
+            spring:
+              habbit:
+                host: localhost:5672
+      
+      bindings:
+      
+        sgdp-audit:
+          destination: sgdp-audit
+          contentType: application/json
+          binder: kafka1 
+        
+        sgdp-input:
+          destination: sgdp-commands
+          group: sw-sgdp-app
+          binder: rabbit1
+        sgdp-output:
+          destination: sgdp-responses
+          binder: rabbit1          
 ```
+
+OBS: Para executar localmente, devemos alterar o *broker* para `localhost:9092`. 
 
 ## Criando as tabelas
 

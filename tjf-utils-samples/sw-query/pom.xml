@@ -6,14 +6,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.2.6.RELEASE</version>
+		<version>2.3.1.RELEASE</version>
 		<relativePath />
 	</parent>
 
 	<groupId>br.com.star.wars</groupId>
 	<artifactId>sw-query</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>sw-query</name>
+	<name>TJF Sample de utilização de Query</name>
 	<description>Exemplo de utilização de diferentes tipos de query</description>
 
 	<properties>
@@ -44,6 +44,12 @@
 		<dependency>
 			<groupId>com.h2database</groupId>
 			<artifactId>h2</artifactId>
+		</dependency>
+
+		<!-- Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
 		</dependency>
 
 		<!-- Test -->

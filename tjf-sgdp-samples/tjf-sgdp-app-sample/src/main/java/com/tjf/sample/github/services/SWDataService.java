@@ -11,6 +11,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tjf.sample.github.model.Jedi;
 import com.tjf.sample.github.model.JediRepository;
+import com.totvs.tjf.sgdp.config.SGDPMetadata;
 import com.totvs.tjf.sgdp.services.data.SGDPDataCommand;
 import com.totvs.tjf.sgdp.services.data.SGDPDataResponse;
 import com.totvs.tjf.sgdp.services.data.SGDPDataService;
@@ -23,7 +24,7 @@ public class SWDataService implements SGDPDataService {
 	private JediRepository jediRepository;
 
 	@Override
-	public SGDPDataResponse execute(SGDPDataCommand command) {
+	public SGDPDataResponse execute(SGDPDataCommand command, SGDPMetadata metadata) {
 		int identification = Integer.parseInt(command.getIdentifiers().get("identification"));
 		List<Jedi> list = jediRepository.findByIdentificationEquals(identification);
 		ObjectMapper mapper = new ObjectMapper();

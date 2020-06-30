@@ -63,7 +63,6 @@ public class SgdpController {
 		MockAuthenticationInfo.setAuthenticationInfo("10");
 		SGDPMaskCommand maskCommand = new SGDPMaskCommand();
 		maskCommand.setIdentifiers(new HashMap<String, String>());
-		maskCommand.setMetadata(this.metadata);
 		maskCommand.getIdentifiers().put("identification", identification);
 		publisher.publish(maskCommand);
 		return "Mask Command was sent !";
@@ -75,7 +74,6 @@ public class SgdpController {
 		SGDPDataCommand dataCommand = new SGDPDataCommand();
 		dataCommand.setIdentifiers(new HashMap<String, String>());
 		dataCommand.getIdentifiers().put("identification", identification);
-		dataCommand.setMetadata(this.metadata);
 		publisher.publish(dataCommand);
 		return "Data Command was sent !";
 	}

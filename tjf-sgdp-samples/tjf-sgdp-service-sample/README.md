@@ -1,10 +1,10 @@
 # SGDP - Sistema de Gestão de Dados Pessoais
 
-## Contexto
+# Contexto
 
 Para exemplificar a biblioteca **SGDP** vamos utilizar o mesmo projeto criado para o _sample_ da biblioteca **API JPA** disponível em nosso [GitHub][tjf-api-jpa-sample].
 
-## Começando com SGDP
+# Começando com SGDP
 
 Com o projeto _sample_ **API JPA** em mãos, vamos alterar alguns campos no banco de dados e incluir as anotações disponibilizadas pelo SGDP na classe de entidade.
 
@@ -24,44 +24,47 @@ Incluir a biblioteca como dependência no `pom.xml` da aplicação:
 Além das propriedades existentes no `application.yml` da aplicação, será necessário incluir novas propriedades. Conforme o exemplo:
 
 ```yml
-cloud:
-  stream:
+  cloud:
+    stream:
 
-    kafka:
-      binder:
-        brokers: localhost:9092
-        configuration:
-          auto:
-            offset:
-              reset: earliest
+      kafka:
+        binder:
+          brokers: localhost:9092
+          configuration:
+            auto:
+              offset:
+                reset: earliest       
 
-    binders:
-      kafka1:
-        type: kafka
-      rabbit1:
-        type: rabbit
-        environment:
-          spring:
-            habbit:
-              host: localhost:5672
+      binders:
+        kafka1:
+          type: kafka
+        rabbit1:
+          type: rabbit
+          environment:
+            spring:
+              habbit:
+                host: localhost:5672
 
-    bindings:
-      sgdp-kafka-reader:
-        destination: sgdp-audit
-        binder: kafka1
-      sgdp-audit:
-        destination: sgdp-audit
-        contentType: application/json
-        binder: kafka1
-
-      sgdp-input:
-        destination: sgdp-responses
-        group: sw-sgdp-service
-        binder: rabbit1
-      sgdp-output:
-        destination: sgdp-commands
-        binder: rabbit1
+      bindings:
+      
+        sgdp-kafka-reader:
+          destination: sgdp-audit
+          binder: kafka1
+        sgdp-audit:
+          destination: sgdp-audit
+          contentType: application/json
+          binder: kafka1
+            
+        sgdp-input:
+          destination: sgdp-responses
+          group: sw-sgdp-service
+          binder: rabbit1
+        sgdp-output:
+          destination: sgdp-commands
+          binder: rabbit1          
 ```
+
+OBS: Para executar localmente, devemos alterar o *broker* para `localhost:9092`. 
 
 ## Auditoria
 
@@ -71,6 +74,7 @@ docker-compose.yml:
 
 ```yml
 version: '2'
+
 services:
 
     zoo1:
@@ -139,49 +143,53 @@ public class Subscriber {
 		System.out.println("#################### MENSAGEM ENVIADA ######################");
 		System.out.println(message);
 	}
+
 }
 ```
 
-## Hora de testar
+# Hora de testar
 
 > Os endpoints podem ser testados também via **Swagger-UI** pela url `localhost:9190/swagger-ui.html`.
 
-**`Registro de tratamento de dados pessoais`**
+**Registro de tratamento de dados pessoais**
 
 Ao efetuar um GET no endpoint `localhost:8180/jedi/v1/jedis` da aplicação **sw-sgdp-app**, teremos as seguintes mensagens no log do serviço **sw-sgdp-service**.
 
 ```
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"9ab443bf-e0b4-4d1a-b49d-f28a1677a0b7","tenantId":null,"timestamp":"2020-05-25T14:34:02.971331","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":1,"name":"Qui-Gon Jinn","identification":7777,"email":"jinn@space.com","gender":"male"}}, headers={kafka_offset=0, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043064, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"0b7a2db3-ddff-415f-acfd-463fcfafa0c7","tenantId":null,"timestamp":"2019-12-18T14:52:31.745827100","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Qui-Gon Jinn","identification":7777,"email":"jinn@space.com","gender":"male"}}, headers={kafka_offset=24, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551785}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"9609c97f-98a1-4092-b8db-5b75ff8e4325","tenantId":null,"timestamp":"2020-05-25T14:34:03.074585","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":2,"name":"Obi-Wan Kenobi","identification":123,"email":"obi@jedi.com","gender":"male"}}, headers={kafka_offset=1, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043075, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"f51703d7-b454-4578-b63f-099aa2c2e91f","tenantId":null,"timestamp":"2019-12-18T14:52:31.794857500","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Obi-Wan Kenobi","identification":123,"email":"obi@jedi.com","gender":"male"}}, headers={kafka_offset=25, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551794}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"d90c067c-04bd-4385-8e18-c75dc95f9346","tenantId":null,"timestamp":"2020-05-25T14:34:03.075594","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":3,"name":"Anakin Skywalker","identification":6666,"email":"darkin@space.com","gender":"male"}}, headers={kafka_offset=2, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043076, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"18a8fbd9-e59a-4707-9c0d-0a4caf0da9d7","tenantId":null,"timestamp":"2019-12-18T14:52:31.795792200","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Anakin Skywalker","identification":6666,"email":"darkin@space.com","gender":"male"}}, headers={kafka_offset=26, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551795}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"babbc9f3-7228-48e1-87c0-ac25b3ac831d","tenantId":null,"timestamp":"2020-05-25T14:34:03.076826","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":4,"name":"Yoda","identification":1,"email":"yoda@space.com","gender":"male"}}, headers={kafka_offset=3, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043077, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"f71cc272-35c3-40f8-97ab-de2abe09ea9f","tenantId":null,"timestamp":"2019-12-18T14:52:31.795792200","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Yoda","identification":1,"email":"yoda@space.com","gender":"male"}}, headers={kafka_offset=27, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551796}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"fd301fd4-ef4f-4834-89d0-dad44bc2fcd3","tenantId":null,"timestamp":"2020-05-25T14:34:03.077745","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":5,"name":"Mace Windu","identification":2341,"email":"mace_windu@jedi.com","gender":"male"}}, headers={kafka_offset=4, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043078, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"99076b32-d692-454f-96fc-c0fa9863d890","tenantId":null,"timestamp":"2019-12-18T14:52:31.796795200","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Mace Windu","identification":2341,"email":"mace_windu@jedi.com","gender":"male"}}, headers={kafka_offset=28, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551796}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"4735b9f5-7c6c-4809-ad79-1143c2546d39","tenantId":null,"timestamp":"2020-05-25T14:34:03.078533","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":6,"name":"Count Dooku","identification":2431,"email":"dooku@dark.com","gender":"male"}}, headers={kafka_offset=5, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043078, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"ecc35ce0-0ec5-4d26-b9d0-15de32f3c53b","tenantId":null,"timestamp":"2019-12-18T14:52:31.796795200","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Count Dooku","identification":2431,"email":"dooku@dark.com","gender":"male"}}, headers={kafka_offset=29, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551797}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"d69d4eec-a4d6-4784-83dd-77478dc1cb5c","tenantId":null,"timestamp":"2020-05-25T14:34:03.085006","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":7,"name":"Luke Skywalker","identification":8543,"email":"luke@jedi.com","gender":"male"}}, headers={kafka_offset=6, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043085, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"579be82c-497f-4b15-a22b-cdaee7c2c06c","tenantId":null,"timestamp":"2019-12-18T14:52:31.797793","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Luke Skywalker","identification":8543,"email":"luke@jedi.com","gender":"male"}}, headers={kafka_offset=30, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551797}]
 #################### MENSAGEM ENVIADA ######################
-GenericMessage [payload={"uuid":"9d8683c2-3378-4b83-b598-52878fb55fb0","tenantId":null,"timestamp":"2020-05-25T14:34:03.085664","user":"anonymousUser","code":"","model":"com.tjf.sample.github.model.Jedi","key":{},"action":"LOAD","data":{"id":8,"name":"Rey","identification":3421,"email":"rey@space.com","gender":"female"}}, headers={kafka_offset=7, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@177cae96, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1590428043086, kafka_groupId=anonymous.effc3a52-1c60-4993-b75d-625670914f40}]
+GenericMessage [payload={"uuid":"23294bc3-8c9e-43f8-8dbe-3ffc14a5b5a3","tenantId":null,"timestamp":"2019-12-18T14:52:31.797793","user":"anonymousUser","code":"","table":"br.com.star.wars.model.Jedi","key":{},"action":"LOAD","data":{"name":"Rey","identification":3421,"email":"rey@space.com","gender":"female"}}, headers={kafka_offset=31, scst_nativeHeadersPresent=true, kafka_consumer=org.apache.kafka.clients.consumer.KafkaConsumer@517746f5, deliveryAttempt=1, kafka_timestampType=CREATE_TIME, kafka_receivedMessageKey=null, kafka_receivedPartitionId=0, contentType=application/json, kafka_receivedTopic=sgdp-audit, kafka_receivedTimestamp=1576691551798}]
+
 ```
 
-**`Consulta de dados pessoais`**
+**Consulta de dados pessoais**
 
 Para efetuar a consulta dos dados pessoais de um titular deve ser requisitada a url `localhost:9190/sgdp/v1/data?identification=1` informando a identificação do Jedi.
 
 Os dados podem ser verificados no log do serviço.
 
-**`Anonimização de dados pessoais`**
+
+**Anonimização de dados pessoais**
 
 Para efetuar a anonimização dos dados pessoais de um titular deve ser requisitada a url `localhost:9190/sgdp/v1/mask?identification=1` informando a identificação do Jedi.
 
 Os dados podem ser verificados no log do serviço.
 
-## Isso é tudo pessoal!
+
+# Isso é tudo pessoal!
 
 Com isso terminamos nosso _sample_, fique a vontade para enriquecê-lo utilizando outros recursos propostos pelo componente [SGDP][tjf-sgdp] e enviar sugestões e melhorias para o projeto **TOTVS Java Framework**.
 
