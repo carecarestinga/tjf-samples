@@ -6,10 +6,10 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.tjf.sample.github</groupId>
-	<artifactId>sw-parent</artifactId>
+	<artifactId>tjf-samples-parent</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	<name>Star Wars :: Jedi Master</name>
+	<name>TJF Samples Parent</name>
 
 	<modules>
 		<module>tjf-api-samples/tjf-api-core-fields-sample</module>
