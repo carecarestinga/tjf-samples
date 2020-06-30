@@ -20,7 +20,7 @@ spring:
           environment:
             spring:
               rabbitmq:
-                host: 172.23.0.2
+                host: ${RABBIT_HOST}
 
 management:
   endpoints:
