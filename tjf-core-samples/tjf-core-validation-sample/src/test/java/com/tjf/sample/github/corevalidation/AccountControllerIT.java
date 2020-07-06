@@ -41,7 +41,7 @@ public class AccountControllerIT {
 
 		assertEquals(500, response.getStatusCodeValue());
 		assertEquals("Internal Server Error", response.getBody().getError());
-		assertEquals("address: tamanho deve estar entre 10 e 100", response.getBody().getMessage());
+		assertEquals("address: tamanho deve ser entre 10 e 100", response.getBody().getMessage());
 		assertEquals(path, response.getBody().getPath());
 		assertEquals(500, response.getBody().getStatus().intValue());
 		assertNotNull(response.getBody().getTimestamp());
